@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix on JS</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+        body, html {
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .line {
+            width: 20px;
+            min-height: 100vh;
+            float: left;
+        }
+
+        .s {
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 18px;
+            color: #18ff00;
+        }
+
+        .hide {
+            color: #fff;
+        }
+
+        .anim {
+            
+            animation-name: fade;animation-duration: 2.5s;
+        }
+        @keyframes fade {
+            from {opacity: 1;}
+            to {opacity: 0.0;}
+        }
+    </style>
+</head>
+<body>
+<div id="matrix" class="matrix">
+
+</div>
+    <script>
+
+        "use strict";
+
+        window.addEventListener("DOMContentLoaded", () => {
+
+            let symbolList=[" "," "," ", "0","1","2","3","4","5","6","7","8","9","か","き","く","け","こ","さ","し","す","せ","そ","た","ち","つ","て","と","な","に","ぬ","ね","の","は","ひ","ふ","へ","ほ","ま","み","む","め","も","や","ゆ","よ","ら","り","る","れ","ろ","わ","ゐ","ゑ","を","ん","ン","ワ","ラ","ヤ","マ","ハ","ナ","タ","サ","カ","ア","リ","ミ","ヒ","ニ","チ","シ","キ","イ","ル","ユ","ム","フ","ヌ","ツ","ス","ク","ウ","レ","メ","ヘ","ネ","テ","セ","ケ","エ","ヲ","ロ","ヨ","モ","ホ","ノ","ト","オ","ソ","コ"];
+            let rndNum = Math.floor(Math.random() * symbolList.length);
+            let blockWidth = Math.floor(document.documentElement.clientWidth / 20);
+            let blockHeight = Math.floor(document.documentElement.clientHeight / 20);
+            let parent = document.querySelector('.matrix');
+
+            let hMassiv = [];
+            let sMassiv = [];
+            let strNum ="";
+
+            function addSymbol() {
+                return symbolList[rndNum];
+            }
+
+            function showVertical() {
+                for (let i = 0; i < blockHeight; i++) {
+                    sMassiv.push(`<div class="s">x</div>`);
+                }
+                return sMassiv.join('')
+            }
+
+            let xxxx = showVertical();
+
+            function showHorisontal() {
+                for (let y = 0; y < blockWidth; y++) {
+                    hMassiv.push(`<div class="line">${xxxx}</div>`);
+                }
+                return hMassiv.join('')
+            }
+
+            parent.innerHTML = showHorisontal();
+
+
+            let contentLine = document.querySelectorAll('.line');
+            let lineSymbol = document.querySelectorAll('.s');
+
+            function randomItem() {
+                lineSymbol.forEach(utem => {
+                    utem.innerHTML = symbolList[Math.floor(Math.random() * symbolList.length)];
+                });
+            }
+            randomItem();
+
+            //setInterval(randomItem, 5000);
+
+            let u = 0;
+
+            function goMatrix(u) {
+                setTimeout(setHide, Math.floor(Math.random() * 5000));
+                function setHide() {
+                    if (u < fr+blockHeight) {
+                        lineSymbol[u].classList.add('hide');
+                        lineSymbol[u].innerHTML = symbolList[Math.floor(Math.random() * symbolList.length)];
+                        u++;
+                        if (u < fr+blockHeight) {
+                            setTimeout(setHide, Math.floor(Math.random() * 10));
+                        } else if (u == fr+blockHeight) {
+                            u=0;
+                            setTimeout(setHide, Math.floor(Math.random() * 10));
+                        }
+                        lineSymbol[u-2].classList.remove('hide');
+                        lineSymbol[u-30].innerHTML = "";
+                        lineSymbol[u-10].classList.add('anim');
+                        lineSymbol[u].classList.remove('anim');
+                    }
+                }
+            }
+            
+            let fr = 0;
+            for (let go = 0; go<blockWidth; go++) {
+                fr = blockHeight * go;
+                goMatrix(fr);
+            }
+        });
+    </script>
+</body>
+</html>
